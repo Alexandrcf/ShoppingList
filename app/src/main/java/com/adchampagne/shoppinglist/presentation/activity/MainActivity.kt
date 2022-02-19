@@ -1,18 +1,18 @@
 package com.adchampagne.shoppinglist.presentation.activity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import com.adchampagne.shoppinglist.presentation.viewModel.MainViewModel
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.adchampagne.shoppinglist.databinding.ActivityMainBinding
 import com.adchampagne.shoppinglist.presentation.adapter.ShopListAdapter
+import com.adchampagne.shoppinglist.presentation.viewModel.MainViewModel
 
 class MainActivity : AppCompatActivity() {
 
-    private val viewModel: MainViewModel by viewModels<MainViewModel>()
+    private val viewModel: MainViewModel by viewModels()
     private lateinit var binding: ActivityMainBinding
     private lateinit var shopListAdapter: ShopListAdapter
 
@@ -25,6 +25,12 @@ class MainActivity : AppCompatActivity() {
         viewModel.shopListLiveData.observe(this) {
             Log.d("MyLogs", it.toString())
             shopListAdapter.submitList(it)
+        }
+
+        binding.buttonAddShopItem.setOnClickListener {
+            val intent = ShopItemActivity.newIntentAddItem(this)
+
+            startActivity(intent)
         }
     }
 
@@ -50,19 +56,21 @@ class MainActivity : AppCompatActivity() {
     private fun setupClickListener() {
         shopListAdapter.onShopItemClickListener = {
             Log.d("MainActivity", it.toString())
+            val intent = ShopItemActivity.newIntentEditItem(this, it.id)
+            startActivity(intent)
         }
     }
 
-    private fun setupLongClickListener() {
+    fun setupLongClickListener() {
         shopListAdapter.onShopItemLongClickListener = {
             viewModel.changeEnableState(it)
         }
     }
 
     private fun setupSwipeListener(rvShopList: RecyclerView) {
-        val callback = object  : ItemTouchHelper.SimpleCallback(
+        val callback = object : ItemTouchHelper.SimpleCallback(
             0,
-        ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
         ) {
             override fun onMove(
                 recyclerView: RecyclerView,

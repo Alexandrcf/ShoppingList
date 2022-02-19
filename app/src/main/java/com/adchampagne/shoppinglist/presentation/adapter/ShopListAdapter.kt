@@ -1,13 +1,11 @@
 package com.adchampagne.shoppinglist.presentation.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.adchampagne.domain.ShopItem
 import com.adchampagne.shoppinglist.R
 import com.adchampagne.shoppinglist.presentation.diffUtils.ShopItemDiffCallback
-import kotlin.math.log
 
 
 class ShopListAdapter: ListAdapter<ShopItem, ShopItemViewHolder>(ShopItemDiffCallback()) {
