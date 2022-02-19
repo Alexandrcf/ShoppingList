@@ -1,6 +1,5 @@
 package com.adchampagne.shoppinglist.presentation.viewModel
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.adchampagne.data.repository.ShopListRepositoryImpl
 import com.adchampagne.domain.ShopItem
@@ -13,17 +12,17 @@ class MainViewModel: ViewModel() {
     private val repository = ShopListRepositoryImpl
 
     private val getShopListUseCase = GetShopListUseCase(repository)
-    private val delShopListUseCase = DelShopItemUseCase(repository)
-    private val editShopListUseCase = EditShopItemUseCase(repository)
+    private val delShopItemUseCase = DelShopItemUseCase(repository)
+    private val editShopItemUseCase = EditShopItemUseCase(repository)
 
     val shopListLiveData = getShopListUseCase.execute()
 
     fun deleteShopItem(shopItem: ShopItem) {
-        delShopListUseCase.execute(shopItem)
+        delShopItemUseCase.execute(shopItem)
     }
 
     fun changeEnableState(shopItem: ShopItem) {
         val newItem = shopItem.copy(enabled = !shopItem.enabled)
-        editShopListUseCase.execute(newItem)
+        editShopItemUseCase.execute(newItem)
     }
 }
