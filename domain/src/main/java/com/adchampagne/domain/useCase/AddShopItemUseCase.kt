@@ -5,7 +5,7 @@ import com.adchampagne.domain.repository.ShopListRepository
 
 class AddShopItemUseCase(private val shopListRepository: ShopListRepository) {
 
-    fun execute(shopItem: ShopItem) {
+    suspend fun execute(shopItem: ShopItem) {
         shopListRepository.addShopItem(shopItem = shopItem)
     }
 }
