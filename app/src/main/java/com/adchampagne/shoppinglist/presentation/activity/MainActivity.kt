@@ -6,13 +6,12 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentContainerView
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.adchampagne.shoppinglist.R
 import com.adchampagne.shoppinglist.databinding.ActivityMainBinding
 import com.adchampagne.shoppinglist.presentation.activity.ShopItemActivity.Companion.newIntentAddItem
-import com.adchampagne.shoppinglist.presentation.adapter.ShopListAdapter
+import com.adchampagne.shoppinglist.presentation.adapters.ShopListAdapter
 import com.adchampagne.shoppinglist.presentation.fragments.ShopItemFragment
 import com.adchampagne.shoppinglist.presentation.viewModel.MainViewModel
 
@@ -21,7 +20,6 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedList
     private val viewModel: MainViewModel by viewModels()
     private lateinit var binding: ActivityMainBinding
     private lateinit var shopListAdapter: ShopListAdapter
-    //private var shopItemContainer: FragmentContainerView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,13 +33,12 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedList
         }
 
         binding.buttonAddShopItem.setOnClickListener {
-            if (isOnePaneMode()){
+            if (isOnePaneMode()) {
                 val intent = newIntentAddItem(this)
                 startActivity(intent)
             } else {
                 launchFragment(ShopItemFragment.newInstanceAddItem())
             }
-
         }
     }
 
@@ -87,7 +84,7 @@ class MainActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedList
         }
     }
 
-    fun setupLongClickListener() {
+    private fun setupLongClickListener() {
         shopListAdapter.onShopItemLongClickListener = {
             viewModel.changeEnableState(it)
         }
