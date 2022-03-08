@@ -3,30 +3,43 @@ package com.adchampagne.shoppinglist.presentation.activity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.adchampagne.shoppinglist.R
 import com.adchampagne.shoppinglist.databinding.ActivityMainBinding
+import com.adchampagne.shoppinglist.di.ShopApplication
 import com.adchampagne.shoppinglist.presentation.activity.ShopItemActivity.Companion.newIntentAddItem
 import com.adchampagne.shoppinglist.presentation.adapters.ShopListAdapter
 import com.adchampagne.shoppinglist.presentation.fragments.ShopItemFragment
 import com.adchampagne.shoppinglist.presentation.viewModel.MainViewModel
+import com.adchampagne.shoppinglist.presentation.viewModel.ViewModelFactory
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedListener {
 
-    private val viewModel: MainViewModel by viewModels()
+    private lateinit var viewModel: MainViewModel
     private lateinit var binding: ActivityMainBinding
     private lateinit var shopListAdapter: ShopListAdapter
 
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val component by lazy {
+        (application as ShopApplication).component
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        component.inject(this)
+
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         initRecycler()
+        viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
         viewModel.shopListLiveData.observe(this) {
             Log.d("MyLogs", it.toString())
             shopListAdapter.submitList(it)

@@ -1,26 +1,19 @@
 package com.adchampagne.shoppinglist.presentation.viewModel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.adchampagne.data.repository.ShopListRepositoryImpl
 import com.adchampagne.domain.ShopItem
 import com.adchampagne.domain.useCase.DelShopItemUseCase
 import com.adchampagne.domain.useCase.EditShopItemUseCase
 import com.adchampagne.domain.useCase.GetShopListUseCase
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MainViewModel(application: Application): AndroidViewModel(application) {
-
-    private val repository = ShopListRepositoryImpl(application)
-
-    private val getShopListUseCase = GetShopListUseCase(repository)
-    private val delShopItemUseCase = DelShopItemUseCase(repository)
-    private val editShopItemUseCase = EditShopItemUseCase(repository)
+class MainViewModel @Inject constructor(
+    private val getShopListUseCase: GetShopListUseCase,
+    private val delShopItemUseCase: DelShopItemUseCase,
+    private val editShopItemUseCase: EditShopItemUseCase,
+) : ViewModel() {
 
     val shopListLiveData = getShopListUseCase.execute()
 
